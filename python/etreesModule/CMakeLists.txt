@@ -19,7 +19,8 @@ add_subdirectory(bindings)
 ########################################################################
 # Install python sources
 ########################################################################
-gr_python_install(FILES __init__.py DESTINATION ${GR_PYTHON_DIR}/gnuradio/etreesModule)
+gr_python_install(FILES __init__.py
+    maxHold.py DESTINATION ${GR_PYTHON_DIR}/gnuradio/etreesModule)
 
 ########################################################################
 # Handle the unit tests
