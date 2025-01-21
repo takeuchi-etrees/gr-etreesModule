@@ -14,13 +14,13 @@ class maxHold(gr.sync_block):
     """
     docstring for block maxHold
     """
-    def __init__(self, selector=True):
+    def __init__(self, vectorSize=1024):
         gr.sync_block.__init__(self,
             name="maxHold",
-            in_sig=[(np.float32, 1024)],
-            out_sig=[(np.float32, 1024)])
-        self.max_vector = np.full(1024, np.finfo(np.float32).min, dtype=np.float32) 
-        self.selector = selector
+            in_sig=[(np.float32, vectorSize)],
+            out_sig=[(np.float32, vectorSize)])
+        self.max_vector = np.full(vectorSize, np.finfo(np.float32).min, dtype=np.float32) 
+        self.vectorSize = vectorSize
 
     def work(self, input_items, output_items):
         in0 = input_items[0]

@@ -13,10 +13,10 @@ templates:
 #     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
 #     * default
 parameters:
-#- id: parametername_replace_me
-#  label: FIX ME
-#  dtype: string
-#  default: You need to fill in your grc/etreesModule_maxHold.block.yaml
+- id: vectorSize
+  label: Vector Length
+  dtype: int
+  default: 1024
 #- id: ...
 #  label: ...
 #  dtype: ...
