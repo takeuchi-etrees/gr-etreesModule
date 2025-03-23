@@ -9,4 +9,5 @@
 ########################################################################
 # Install public header files
 ########################################################################
-install(FILES api.h DESTINATION include/gnuradio/etreesModule)
+install(FILES api.h
+    bleDecoder.h DESTINATION include/gnuradio/etreesModule)

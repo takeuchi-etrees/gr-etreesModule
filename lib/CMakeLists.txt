@@ -11,7 +11,8 @@
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 
-list(APPEND etreesModule_sources)
+list(APPEND etreesModule_sources
+    bleDecoder_impl.cc)
 
 set(etreesModule_sources
     "${etreesModule_sources}"
