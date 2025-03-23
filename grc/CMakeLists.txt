@@ -8,4 +8,5 @@
 
 install(FILES
     etreesModule_maxHold.block.yml
-    etreesModule_bleDecoder.block.yml DESTINATION share/gnuradio/grc/blocks)
+    etreesModule_bleDecoder.block.yml
+    etreesModule_calcPhaseDiff.block.yml DESTINATION share/gnuradio/grc/blocks)
