@@ -11,28 +11,26 @@
 #include <bitset>
 using namespace std;
 
-uint8_t inline SwapBits(uint8_t a){
-	return (uint8_t) (((a * 0x0802LU & 0x22110LU) | (a * 0x8020LU & 0x88440LU)) * 0x10101LU >> 16);
+uint8_t inline SwapBits(uint8_t a) {
+    return (uint8_t) (((a * 0x0802LU & 0x22110LU) | (a * 0x8020LU & 0x88440LU)) * 0x10101LU >> 16);
 }
 
 
 /* whiten (descramble) BTLE packet using channel value */
 void BTLEWhiten(uint8_t* data, uint8_t len, uint8_t chan){
+    uint8_t  i;
+    uint8_t lfsr = SwapBits(chan) | 2;
 
-	uint8_t  i;
-	uint8_t lfsr = SwapBits(chan) | 2;
-	while(len--){
-		for(i = 0x80; i; i >>= 1){
-
-			if(lfsr & 0x80){
-
-				lfsr ^= 0x11;
-				(*data) ^= i;
-			}
-			lfsr <<= 1;
-		}
-		data++;
-	}
+    while(len--) {
+        for(i = 0x80; i; i >>= 1) {
+            if(lfsr & 0x80) {
+                lfsr ^= 0x11;
+                (*data) ^= i;
+            }
+            lfsr <<= 1;
+        }
+        data++;
+    }
 }
 
 
@@ -41,7 +39,7 @@ namespace etreesModule {
 
 using input_type = uint8_t;
 using output_type = uint8_t;
-bleDecoder::sptr bleDecoder::make(std::string uuid)
+bleDecoder::sptr bleDecoder::make(string uuid)
 {
     return gnuradio::make_block_sptr<bleDecoder_impl>(uuid);
 }
@@ -50,7 +48,7 @@ bleDecoder::sptr bleDecoder::make(std::string uuid)
 /*
  * The private constructor
  */
-bleDecoder_impl::bleDecoder_impl(std::string uuid)
+bleDecoder_impl::bleDecoder_impl(string uuid)
     : gr::sync_block("bleDecoder",
                      gr::io_signature::make(
                          1 /* min inputs */, 1 /* max inputs */, sizeof(input_type)),
@@ -73,6 +71,8 @@ int bleDecoder_impl::work(int noutput_items,
     auto out = static_cast<output_type*>(output_items[0]);
     const size_t N = sizeof(int) * 8;
 
+    auto ms_since_epoch(chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count());
+
     // Do <+signal processing+>
     for (int index = 0; index < noutput_items; index++) {
         out[index] = in[index];
@@ -94,12 +94,10 @@ int bleDecoder_impl::work(int noutput_items,
     if (off != samp0_count)
         return off - samp0_count;
 
-    /*
-    std::cout << std::endl << "BLE_SYNC\n";
-    */
+    // cout << endl << "BLE_SYNC\n";
     
     uint8_t data[256];
-    std::string out_text = "";
+    string out_text = "";
 
     int size = 2;
 
@@ -112,17 +110,10 @@ int bleDecoder_impl::work(int noutput_items,
 	}
       }
       data[i] = SwapBits((int)bitset<N>(out_text).to_ulong());
-      /*
-      printf("%02X ", SwapBits(data[j]));
-      */
       out_text = "";
     }
 
     BTLEWhiten(data, size, 38);
-
-    /*
-    printf("length = %d\n", SwapBits(data[1]) & 0x3f);
-    */
 
     size = (SwapBits(data[1]) & 0x3f) + 2;
 
@@ -135,20 +126,10 @@ int bleDecoder_impl::work(int noutput_items,
 	}
       }
       data[i] = SwapBits((int)bitset<N>(out_text).to_ulong());
-      /*
-      printf("%02X ", SwapBits(data[j]));
-      */
       out_text = "";
     }
 
     BTLEWhiten(data, size, 38);
-
-    /*
-    for (int i = 0; i < size; i++) {
-      printf("%02X ", SwapBits(data[i]));
-    }
-    printf("\n");
-    */
 
     char mac[256];
     char uuid[256];
@@ -166,10 +147,16 @@ int bleDecoder_impl::work(int noutput_items,
     if (uuid == _uuid) {
       printf("%s\n", uuid);
       printf("HIT!\n");
-      add_item_tag(0, nitems_written(0) +  8 * 8, pmt::intern("MAC"), pmt::intern(mac));
-      add_item_tag(0, nitems_written(0) + 17 * 8, pmt::intern("UUID"), pmt::intern(uuid));
-      add_item_tag(0, nitems_written(0) + 32 * 8, pmt::intern("UUID"), pmt::intern("END"));
-      add_item_tag(0, nitems_written(0) + 38 * 8, pmt::intern("END"), pmt::intern(""));
+
+      string str;
+      str.append(mac);
+      str.append("@");
+      str.append(to_string(ms_since_epoch));
+      add_item_tag(0, nitems_written(0) +  2 * 8, pmt::intern("MAC"), pmt::intern(str));
+
+      //add_item_tag(0, nitems_written(0) + 17 * 8, pmt::intern("UUID"), pmt::intern(uuid));
+      //add_item_tag(0, nitems_written(0) + 32 * 8, pmt::intern("UUID"), pmt::intern("END"));
+      //add_item_tag(0, nitems_written(0) + 38 * 8, pmt::intern("END"), pmt::intern(""));
     }
 
     // Tell runtime system how many output items we produced.
