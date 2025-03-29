@@ -11,4 +11,5 @@
 ########################################################################
 install(FILES api.h
     bleDecoder.h
-    calcPhaseDiff.h DESTINATION include/gnuradio/etreesModule)
+    calcPhaseDiff.h
+    moveTag.h DESTINATION include/gnuradio/etreesModule)

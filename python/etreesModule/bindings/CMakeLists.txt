@@ -26,7 +26,8 @@ include(GrPybind)
 
 list(APPEND etreesModule_python_files
     bleDecoder_python.cc
-    calcPhaseDiff_python.cc python_bindings.cc)
+    calcPhaseDiff_python.cc
+    moveTag_python.cc python_bindings.cc)
 
 gr_pybind_make_oot(etreesModule ../../.. gr::etreesModule "${etreesModule_python_files}")
 

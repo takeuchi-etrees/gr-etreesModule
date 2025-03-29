@@ -7,6 +7,7 @@
 
 #include "calcPhaseDiff_impl.h"
 #include <gnuradio/io_signature.h>
+#include <gnuradio/math.h>
 
 namespace gr {
 namespace etreesModule {
@@ -51,19 +52,19 @@ int calcPhaseDiff_impl::work(int noutput_items,
     float sub;
     float add;
     for (int index = 0; index < noutput_items; index++) {
-        in0_re = in0[0].real();
-        in0_im = in0[0].imag();
-        in1_re = in1[0].real();
-        in1_im = in1[0].imag();
+        in0_re = in0[index].real();
+        in0_im = in0[index].imag();
+        in1_re = in1[index].real();
+        in1_im = in1[index].imag();
 
         mult0 = in0_re * in1_im;
-        mult1 = in0_im * in0_im;
+        mult1 = in1_re * in0_im;
         mult2 = in0_re * in1_re;
-        mult3 = in0_im * in0_im;
+        mult3 = in0_im * in1_im;
 
 	sub = mult0 - mult1;
-	add = mult2 - mult3;
-        out[index] = atan(sub / add);
+	add = mult2 + mult3;
+	out[index] = atan2f(sub, add);
     }
 
     // Tell runtime system how many output items we produced.
