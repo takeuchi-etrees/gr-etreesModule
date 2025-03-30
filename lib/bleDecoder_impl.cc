@@ -134,7 +134,7 @@ int bleDecoder_impl::work(int noutput_items,
     char mac[256];
     char uuid[256];
     if (size > 7) {
-      sprintf(mac, "%02X:%02X:%02X:%02X:%02X:%02X\n", SwapBits(data[7]), SwapBits(data[6]), SwapBits(data[5]), SwapBits(data[4]), SwapBits(data[3]), SwapBits(data[2]));
+      sprintf(mac, "%02X:%02X:%02X:%02X:%02X:%02X", SwapBits(data[7]), SwapBits(data[6]), SwapBits(data[5]), SwapBits(data[4]), SwapBits(data[3]), SwapBits(data[2]));
     }
 
     if (size > 33) {
