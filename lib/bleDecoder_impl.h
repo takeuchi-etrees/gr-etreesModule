@@ -18,6 +18,7 @@ class bleDecoder_impl : public bleDecoder
 private:
     std::string _uuid;
     std::vector<tag_t> d_tags;
+    int seq;
 
 public:
     bleDecoder_impl(std::string uuid);

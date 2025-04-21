@@ -56,6 +56,7 @@ bleDecoder_impl::bleDecoder_impl(string uuid)
                          1 /* min outputs */, 1 /*max outputs */, sizeof(output_type)))
 {
     _uuid = uuid;
+    seq = 0;
 }
 
 /*
@@ -145,6 +146,7 @@ int bleDecoder_impl::work(int noutput_items,
     }
 
     if (uuid == _uuid) {
+      //if (1) {
       printf("%s\n", uuid);
       printf("HIT!\n");
 
@@ -152,11 +154,14 @@ int bleDecoder_impl::work(int noutput_items,
       str.append(mac);
       str.append("@");
       str.append(to_string(ms_since_epoch));
+      str.append("@");
+      str.append(to_string(seq));
       add_item_tag(0, nitems_written(0) +  2 * 8, pmt::intern("MAC"), pmt::intern(str));
 
       //add_item_tag(0, nitems_written(0) + 17 * 8, pmt::intern("UUID"), pmt::intern(uuid));
       //add_item_tag(0, nitems_written(0) + 32 * 8, pmt::intern("UUID"), pmt::intern("END"));
       //add_item_tag(0, nitems_written(0) + 38 * 8, pmt::intern("END"), pmt::intern(""));
+      seq++;
     }
 
     // Tell runtime system how many output items we produced.
