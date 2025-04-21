@@ -124,6 +124,8 @@ int calcPhaseDiff_impl::work(int noutput_items,
     volk_free(add);
     volk_free(sub);
 
+    volk_free(c);
+
     // Tell runtime system how many output items we produced.
     return noutput_items;
 }
