@@ -10,4 +10,5 @@ install(FILES
     etreesModule_maxHold.block.yml
     etreesModule_bleDecoder.block.yml
     etreesModule_calcPhaseDiff.block.yml
-    etreesModule_moveTag.block.yml DESTINATION share/gnuradio/grc/blocks)
+    etreesModule_moveTag.block.yml
+    etreesModule_rangeDetector.block.yml DESTINATION share/gnuradio/grc/blocks)

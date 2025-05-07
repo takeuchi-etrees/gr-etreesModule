@@ -14,7 +14,8 @@ include(GrPlatform) #define LIB_SUFFIX
 list(APPEND etreesModule_sources
     bleDecoder_impl.cc
     calcPhaseDiff_impl.cc
-    moveTag_impl.cc)
+    moveTag_impl.cc
+    rangeDetector_impl.cc)
 
 set(etreesModule_sources
     "${etreesModule_sources}"

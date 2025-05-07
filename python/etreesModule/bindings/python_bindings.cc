@@ -24,6 +24,7 @@ namespace py = pybind11;
     void bind_bleDecoder(py::module& m);
     void bind_calcPhaseDiff(py::module& m);
     void bind_moveTag(py::module& m);
+    void bind_rangeDetector(py::module& m);
 // ) END BINDING_FUNCTION_PROTOTYPES
 
 
@@ -55,5 +56,6 @@ PYBIND11_MODULE(etreesModule_python, m)
     bind_bleDecoder(m);
     bind_calcPhaseDiff(m);
     bind_moveTag(m);
+    bind_rangeDetector(m);
     // ) END BINDING_FUNCTION_CALLS
 }
